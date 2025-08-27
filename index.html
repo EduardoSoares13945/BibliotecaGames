@@ -94,24 +94,28 @@
     </main>
 
     <script>
-        const API_KEY = "2044abaab6e545979bd4718ba8ef8403";
+        const API_KEY = "2044abaab6e545979bd4718ba8ef8403"; // sua chave aqui
 
         async function buscarJogos(query) {
             const url = `https://api.rawg.io/api/games?key=${API_KEY}&search=${encodeURIComponent(query)}&page_size=12`;
 
-            const resp = await fetch(url);
-            const data = await resp.json();
+            try {
+                const resp = await fetch(url);
+                if (!resp.ok) {
+                    throw new Error("Erro HTTP: " + resp.status);
+                }
+                const data = await resp.json();
 
-            const resultsDiv = document.getElementById("results");
-            resultsDiv.innerHTML = "";
+                const resultsDiv = document.getElementById("results");
+                resultsDiv.innerHTML = "";
 
-            if (!data.results || data.results.length === 0) {
-                resultsDiv.innerHTML = "<p>Nenhum jogo encontrado.</p>";
-                return;
-            }
+                if (!data.results || data.results.length === 0) {
+                    resultsDiv.innerHTML = "<p>Nenhum jogo encontrado.</p>";
+                    return;
+                }
 
-            data.results.forEach(game => {
-                resultsDiv.innerHTML += `
+                data.results.forEach(game => {
+                    resultsDiv.innerHTML += `
           <div class="card">
             <img src="${game.background_image || ''}" alt="${game.name}">
             <div class="card-content">
@@ -123,10 +127,13 @@
             </div>
           </div>
         `;
-            });
+                });
+            } catch (err) {
+                console.error("Erro ao buscar jogos:", err);
+                document.getElementById("results").innerHTML = "<p>Erro ao acessar a API.</p>";
+            }
         }
 
-        // Eventos
         document.getElementById("btn").addEventListener("click", () => {
             const q = document.getElementById("q").value.trim();
             if (q) buscarJogos(q);
@@ -138,7 +145,7 @@
             }
         });
 
-        // Busca inicial só pra demonstrar
+        // busca inicial
         buscarJogos("Zelda");
     </script>
 </body>
