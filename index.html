@@ -94,7 +94,7 @@
     </main>
 
     <script>
-        const API_KEY = "2044abaab6e545979bd4718ba8ef8403"; // sua chave aqui
+        const API_KEY = "2044abaab6e545979bd4718ba8ef8403";
 
         async function buscarJogos(query) {
             const url = `https://api.rawg.io/api/games?key=${API_KEY}&search=${encodeURIComponent(query)}&page_size=12`;
@@ -145,8 +145,6 @@
             }
         });
 
-        // busca inicial
-        buscarJogos("Zelda");
     </script>
 </body>
 
